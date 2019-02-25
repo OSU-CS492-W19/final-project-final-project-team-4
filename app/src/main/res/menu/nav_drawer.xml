@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_search"
+        android:title="temp1" />
+
+    <item
+        android:id="@+id/nav_saved_repos"
+        android:title="temp2" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="temp3" />
+
+</menu>
