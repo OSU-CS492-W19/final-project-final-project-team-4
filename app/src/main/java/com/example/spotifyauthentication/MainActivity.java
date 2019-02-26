@@ -1,9 +1,12 @@
 package com.example.spotifyauthentication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -18,10 +21,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String mAccessToken;
     private Call mCall;
     private TextView mDisplayName;
+    private String mdisplayPic;
     private String mdisplayName;
     private DrawerLayout mDrawerLayout;
     private ImageView mDisplayPic;
@@ -138,7 +146,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         System.out.println(jsonObject.toString(3));
                         mdisplayName = jsonObject.getString("display_name");
-
+                        JSONArray images = jsonObject.getJSONArray("images");
+                        mdisplayPic = images.getJSONObject(0).getString("url");
+                        System.out.println(mdisplayPic);
                         setResponse(mdisplayName);
                     } catch (JSONException e) {
                         setResponse("Failed to parse data: " + e);
@@ -148,6 +158,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void setPicture(final String pic){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
+        View headerView = navigationView.getHeaderView(0);
+        ImageView displayPic = headerView.findViewById(R.id.display_pic);
+        Glide.with(displayPic.getContext()).load(pic).into(displayPic);
+
+    }
+
     private void setResponse(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -155,8 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
                 View headerView = navigationView.getHeaderView(0);
                 TextView navUsername = (TextView) headerView.findViewById(R.id.display_name);
-                ImageView displayPic = headerView.findViewById(R.id.display_pic);
-                navUsername.setText("Welcome " + text + "!");
+                navUsername.setText(text);
+                setPicture(mdisplayPic);
+                invalidateOptionsMenu();
             }
         });
     }
@@ -170,6 +189,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private String getRedirectUri() {
         return "http://com.example.spotifyauthentication/callback";
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem logoItem = menu.findItem(R.id.login);
+        if (mdisplayPic != null) {
+            Glide.with(this).asBitmap().load(mdisplayPic).into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    logoItem.setIcon(new BitmapDrawable(getResources(), resource));
+                }
+            });
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
