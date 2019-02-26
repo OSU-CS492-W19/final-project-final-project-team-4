@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="128dp"
     android:background="@color/colorPrimary"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:orientation="horizontal">
 
     <ImageView
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_margin="16dp"
         android:id="@+id/display_pic"
-        android:src="@drawable/spotify"/>
+        android:layout_width="70dp"
+        android:layout_height="65dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/spotify" />
+
+    <TextView
+        android:id="@+id/display_name"
+        android:layout_width="197dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="0dp"
+        android:padding="8dp"
+        android:textColor="#fff"
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="57dp"
+        android:layout_marginRight="57dp"
+        android:layout_marginBottom="31dp"
         android:padding="8dp"
-        android:textSize="25sp"
+        android:text="Randify"
         android:textColor="#fff"
-        android:id="@+id/display_name"
-        android:text="Spotify Playlist Generator" />
+        android:textSize="25sp" />
 
-</LinearLayout>
+</RelativeLayout>
