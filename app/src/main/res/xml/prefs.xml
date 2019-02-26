@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ListPreference
+        android:key="@string/pref_sort_key"
+        android:title="@string/pref_sort_title"
+        android:summary="%s"
+        android:dialogTitle="@string/pref_sort_title"
+        android:entries="@array/pref_sort_entries"
+        android:entryValues="@array/pref_sort_values"
+        android:defaultValue="@string/pref_sort_default"/>
+
+    <EditTextPreference
+        android:key="key_name"
+        android:title="Playlist Name"/>
+
+    <EditTextPreference
+        android:key="key_numsongs"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
+        android:title="Number of Songs"/>
+
+    <EditTextPreference
+        android:key="key_popu"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
+        android:title="Popularity"/>
+
+
+</PreferenceScreen>

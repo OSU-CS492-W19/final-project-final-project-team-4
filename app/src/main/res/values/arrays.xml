@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_sort_entries">
+        <item>@string/pref_sort_entry_rock</item>
+        <item>@string/pref_sort_entry_rap</item>
+        <item>@string/pref_sort_entry_pop</item>
+        <item>@string/pref_sort_entry_country</item>
+        <item>@string/pref_sort_entry_edm</item>
+        <item>@string/pref_sort_entry_jazz</item>
+    </string-array>
+
+    <string-array name="pref_sort_values">
+        <item>@string/pref_sort_entry_rock</item>
+        <item>@string/pref_sort_value_rap</item>
+        <item>@string/pref_sort_value_pop</item>
+        <item>@string/pref_sort_value_country</item>
+        <item>@string/pref_sort_value_edm</item>
+        <item>@string/pref_sort_value_jazz</item>
+    </string-array>
+
+</resources>

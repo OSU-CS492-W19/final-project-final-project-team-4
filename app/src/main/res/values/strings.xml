@@ -1,8 +1,27 @@
 <resources>
-    <string name="app_name">Spotify Android Auth</string>
+    <string name="app_name">Spotify Playlist Generator</string>
     <string name="warning_need_token">You need to request an access token first</string>
     <string name="code">Code: %1$s</string>
     <string name="token">Access Token: %1$s</string>
     <string name="com_spotify_sdk_redirect_scheme">http://</string>
     <string name="com_spotify_sdk_redirect_host">com.example.spotifyauthentication/callback</string>
+
+
+
+    <!-- Strings for sort-by preference -->
+    <string name="pref_sort_key" translatable="false">pref_sort</string>
+    <string name="pref_sort_title">Genre</string>
+    <string name="pref_sort_entry_rock">Rock</string>
+    <string name="pref_sort_value_rock">rock</string>
+    <string name="pref_sort_entry_rap">Rap</string>
+    <string name="pref_sort_value_rap" translatable="false">rap</string>
+    <string name="pref_sort_entry_pop">Pop</string>
+    <string name="pref_sort_value_pop" translatable="false">pop</string>
+    <string name="pref_sort_entry_country">Country</string>
+    <string name="pref_sort_value_country" translatable="false">country</string>
+    <string name="pref_sort_value_jazz" translatable="false">jazz</string>
+    <string name="pref_sort_entry_jazz">Jazz</string>
+    <string name="pref_sort_value_edm" translatable="false">edm</string>
+    <string name="pref_sort_entry_edm">EDM</string>
+    <string name="pref_sort_default">@string/pref_sort_value_rap</string>
 </resources>

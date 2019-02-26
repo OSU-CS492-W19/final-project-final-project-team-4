@@ -84,6 +84,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case android.R.id.home:
                 mDrawerLayout.openDrawer(Gravity.START);
                 return true;
+            case R.id.action_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.action_spot:
+                Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
+                startActivity(spotifyIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -166,6 +174,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+        mDrawerLayout.closeDrawers();
+        switch (menuItem.getItemId()){
+            case R.id.nav_generate:
+                return true;
+            case R.id.nav_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
+                return true;
+            case R.id.nav_spotify:
+                Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
+                startActivity(spotifyIntent);
+                return true;
+            default:
+                return false;
+        }
     }
 }

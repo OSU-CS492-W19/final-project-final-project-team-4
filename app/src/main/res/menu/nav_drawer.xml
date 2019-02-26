@@ -2,15 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_search"
-        android:title="temp1" />
+        android:id="@+id/nav_generate"
+        android:title="Generate Playlist" />
 
     <item
-        android:id="@+id/nav_saved_repos"
-        android:title="temp2" />
+        android:id="@+id/nav_spotify"
+        android:title="Spotify" />
 
     <item
         android:id="@+id/nav_settings"
-        android:title="temp3" />
+        android:title="Playlist Settings" />
+
 
 </menu>
