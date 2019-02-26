@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String mdisplayPic;
     private String mdisplayName;
     private DrawerLayout mDrawerLayout;
+    private int mLogout = 0;
     private ImageView mDisplayPic;
 
     @Override
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.login:
                 onRequestTokenClicked();
+                mLogout = 0;
                 return true;
             case android.R.id.home:
                 mDrawerLayout.openDrawer(Gravity.START);
@@ -194,16 +196,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem logoItem = menu.findItem(R.id.login);
-        if (mdisplayPic != null) {
-            Glide.with(this).asBitmap().load(mdisplayPic).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    logoItem.setIcon(new BitmapDrawable(getResources(), resource));
-                }
-            });
+        if(mLogout == 0){
+            if (mdisplayPic != null) {
+                Glide.with(this).asBitmap().load(mdisplayPic).into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        logoItem.setIcon(new BitmapDrawable(getResources(), resource));
+                    }
+                });
+            }
+        }
+        else{
+            logoItem.setIcon(R.drawable.ic_action_name);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
+            View headerView = navigationView.getHeaderView(0);
+            ImageView displayPic = headerView.findViewById(R.id.display_pic);
+            displayPic.setImageResource(R.drawable.user);
+            mdisplayName = null;
+            mdisplayPic = null;
+            mAccessToken = null;
         }
         return super.onPrepareOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -213,10 +228,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.nav_login:
                 onRequestTokenClicked();
+                mLogout = 0;
                 return true;
             case R.id.nav_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
+                return true;
+            case R.id.nav_logout:
+                onRequestTokenClicked();
+                mLogout = 1;
                 return true;
             case R.id.nav_spotify:
                 Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
@@ -224,6 +244,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             default:
                 return false;
+        }
+    }
+
+    public void generatePlaylist(View view) {
+        if (mAccessToken == null) {
+            final Snackbar snackbar = Snackbar.make(findViewById(R.id.drawer_layout), R.string.warning_need_token, Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            snackbar.show();
+            return;
         }
     }
 }

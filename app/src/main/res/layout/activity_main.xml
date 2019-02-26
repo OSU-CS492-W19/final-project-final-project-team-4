@@ -21,6 +21,14 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+        <Button
+            android:id="@+id/btn_gen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:onClick="generatePlaylist"
+            android:text="Generate Playlist" />
+
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
@@ -31,5 +39,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/nav_drawer"/>
+
 
 </android.support.v4.widget.DrawerLayout>
