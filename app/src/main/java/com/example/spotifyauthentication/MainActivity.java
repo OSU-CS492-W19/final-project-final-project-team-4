@@ -43,7 +43,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    public static final String CLIENT_ID = "bb38e536a86e4e18a8c8300a10397733";
+    public static final String CLIENT_ID = "4b4b430bd9d743fa9a00bfb99caa671c";
     public static final int AUTH_TOKEN_REQUEST_CODE = 0x10;
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
