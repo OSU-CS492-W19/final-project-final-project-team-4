@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String mdisplayName;
     private DrawerLayout mDrawerLayout;
     private int mLogout = 0;
+    private int mInit = 0;
     private ImageView mDisplayPic;
 
     @Override
@@ -196,7 +197,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem logoItem = menu.findItem(R.id.login);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
         if(mLogout == 0){
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_login).setVisible(false);
+            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
             if (mdisplayPic != null) {
                 Glide.with(this).asBitmap().load(mdisplayPic).into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -208,13 +213,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else{
             logoItem.setIcon(R.drawable.ic_action_name);
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
             View headerView = navigationView.getHeaderView(0);
             ImageView displayPic = headerView.findViewById(R.id.display_pic);
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_login).setVisible(true);
+            nav_Menu.findItem(R.id.nav_logout).setVisible(false);
             displayPic.setImageResource(R.drawable.user);
+            TextView navUsername = (TextView) headerView.findViewById(R.id.display_name);
+            navUsername.setText("");
             mdisplayName = null;
             mdisplayPic = null;
             mAccessToken = null;
+        }
+        if(mInit == 0){
+            Menu nav_Menu = navigationView.getMenu();
+            nav_Menu.findItem(R.id.nav_login).setVisible(true);
+            nav_Menu.findItem(R.id.nav_logout).setVisible(false);
+            mInit = 1;
         }
         return super.onPrepareOptionsMenu(menu);
     }
