@@ -2,16 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/nav_login"
+        android:title="Login"
+        android:icon="@drawable/ic_action_name"/>
+
+    <item
         android:id="@+id/nav_generate"
-        android:title="Generate Playlist" />
+        android:title="Generate Playlist"
+        android:icon="@drawable/ic_action_generate"
+        />
 
     <item
         android:id="@+id/nav_spotify"
-        android:title="Spotify" />
+        android:title="Spotify"
+        android:icon="@drawable/ic_action_spotify"/>
 
     <item
         android:id="@+id/nav_settings"
-        android:title="Playlist Settings" />
+        android:title="Playlist Settings"
+        android:icon="@drawable/ic_action_settings"
+        />
 
 
 </menu>

@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.nav_generate:
                 return true;
+            case R.id.nav_login:
+                onRequestTokenClicked();
+                return true;
             case R.id.nav_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
