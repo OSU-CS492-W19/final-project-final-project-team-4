@@ -101,7 +101,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.action_spot:
                 Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
-                startActivity(spotifyIntent);
+                if(spotifyIntent.resolveActivity(getPackageManager()) != null){
+                    startActivity(spotifyIntent);
+                }
+                else{
+                    AuthenticationClient.openDownloadSpotifyActivity(this);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -121,6 +126,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setCampaign("your-campaign-token")
                 .build();
     }
+
+    private AuthenticationRequest getAuthenticationLogoutRequest(AuthenticationResponse.Type type) {
+        return new AuthenticationRequest.Builder(CLIENT_ID, type, getRedirectUri())
+                .setShowDialog(true)
+                .setScopes(new String[]{"user-read-email"})
+                .setCampaign("your-campaign-token")
+                .build();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -251,11 +265,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.nav_logout:
                 onRequestTokenClicked();
+                final AuthenticationRequest request = getAuthenticationLogoutRequest(AuthenticationResponse.Type.TOKEN);
+                AuthenticationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request);
                 mLogout = 1;
                 return true;
             case R.id.nav_spotify:
                 Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
-                startActivity(spotifyIntent);
+                if(spotifyIntent.resolveActivity(getPackageManager()) != null){
+                    startActivity(spotifyIntent);
+                }
+                else{
+                    AuthenticationClient.openDownloadSpotifyActivity(this);
+                }
                 return true;
             default:
                 return false;
