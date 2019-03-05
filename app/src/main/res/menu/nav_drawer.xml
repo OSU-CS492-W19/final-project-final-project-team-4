@@ -29,5 +29,11 @@
         android:icon="@drawable/ic_action_logout"
         />
 
+    <item
+        android:id="@+id/nav_help"
+        android:title="Help"
+        android:icon="@drawable/ic_action_help"
+        />
+
 
 </menu>

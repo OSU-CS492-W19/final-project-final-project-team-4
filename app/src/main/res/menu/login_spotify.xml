@@ -9,15 +9,15 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_action_settings"
+        android:id="@+id/action_spot"
+        android:icon="@drawable/ic_action_spotify"
         android:title="Settings"
         android:orderInCategory="2"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_spot"
-        android:icon="@drawable/ic_action_spotify"
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_action_settings"
         android:title="Settings"
         android:orderInCategory="2"
         app:showAsAction="ifRoom" />

@@ -269,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 AuthenticationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request);
                 mLogout = 1;
                 return true;
+            case R.id.nav_help:
+                Intent intent = new Intent(this, HelpActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.nav_spotify:
                 Intent spotifyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("spotify:"));
                 if(spotifyIntent.resolveActivity(getPackageManager()) != null){
