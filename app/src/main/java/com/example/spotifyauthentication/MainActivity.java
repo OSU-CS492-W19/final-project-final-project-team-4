@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.ArrayList;
 import com.bumptech.glide.Glide;
@@ -73,11 +74,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<String> mDuration = new ArrayList<String>();
     private ArrayList<String> mID = new ArrayList<String>();
     private ArrayList<String> mImageURL = new ArrayList<String>();
+    private ProgressBar mLoadingIndicatorPB;
+    private TextView mLoadingErrorMessageTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLoadingIndicatorPB = findViewById(R.id.pb_loading_indicator);
+        mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
+        mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
+        mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nv_nav_drawer);
         navigationView.setNavigationItemSelectedListener(this);
@@ -341,6 +348,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void playlistJson(String URI){
+        mPlaylistItemsRV.setVisibility(View.VISIBLE);
+        ImageView spotifyImage = findViewById(R.id.spot_img);
+        spotifyImage.setVisibility(View.INVISIBLE);
+        TextView randifyText = findViewById(R.id.randify_text);
+        randifyText.setVisibility(View.INVISIBLE);
         final Request request = new Request.Builder()
                 .url(URI)
                 .addHeader("Authorization","Bearer " + mAccessToken)
@@ -348,16 +360,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         cancelCall();
         mCall = mOkHttpClient.newCall(request);
-
+        mLoadingIndicatorPB.setVisibility(View.VISIBLE);
 
         mCall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 System.out.println("Failed to fetch data: " + e);
+                mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+                mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray playListInfo = jsonObject.getJSONObject("tracks").getJSONArray("items");
@@ -382,11 +398,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mPlaylistItemsRV.setVisibility(View.VISIBLE);
-                            ImageView spotifyImage = findViewById(R.id.spot_img);
-                            spotifyImage.setVisibility(View.INVISIBLE);
-                            TextView randifyText = findViewById(R.id.randify_text);
-                            randifyText.setVisibility(View.INVISIBLE);
                             TextView playlistText = findViewById(R.id.playlist_text);
                             playlistText.setText(mPlaylistName);
                             playlistText.setVisibility(View.VISIBLE);

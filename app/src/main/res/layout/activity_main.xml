@@ -101,6 +101,30 @@
             android:layout_above="@+id/btn_gen"
             android:layout_marginBottom="-1dp" />
 
+        <TextView
+            android:id="@+id/tv_loading_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:visibility="invisible"
+            android:text="Could not generate playlist. Check your internet!" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading_indicator"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginEnd="168dp"
+            android:layout_marginRight="168dp"
+            android:layout_marginBottom="408dp"
+            android:visibility="invisible" />
+
+
+
 
     </RelativeLayout>
 
