@@ -1,7 +1,9 @@
 package com.example.spotifyauthentication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +15,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,7 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import java.util.ArrayList;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -31,6 +36,7 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -41,21 +47,32 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PlaylistAdapter.OnPlaylistItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String CLIENT_ID = "4b4b430bd9d743fa9a00bfb99caa671c";
     public static final int AUTH_TOKEN_REQUEST_CODE = 0x10;
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    private RecyclerView mPlaylistItemsRV;
+    private PlaylistAdapter mPlaylistAdapter;
     private String mAccessToken;
     private Call mCall;
     private TextView mDisplayName;
     private String mdisplayPic;
     private String mdisplayName;
     private DrawerLayout mDrawerLayout;
+    private String mPlaylistName;
     private int mLogout = 0;
     private int mInit = 0;
     private ImageView mDisplayPic;
+    private String mGenre;
+    private String mPopularity;
+    private String mNumSongs;
+    private ArrayList<String> mArtists = new ArrayList<String>();
+    private ArrayList<String> mTracks = new ArrayList<String>();
+    private ArrayList<String> mDuration = new ArrayList<String>();
+    private ArrayList<String> mID = new ArrayList<String>();
+    private ArrayList<String> mImageURL = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +85,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mPlaylistItemsRV = findViewById(R.id.rv_playlist_items);
+        mPlaylistItemsRV.setVisibility(View.INVISIBLE);
+        mPlaylistAdapter = new PlaylistAdapter(this);
+        mPlaylistItemsRV.setAdapter(mPlaylistAdapter);
+        mPlaylistItemsRV.setLayoutManager(new LinearLayoutManager(this));
+        mPlaylistItemsRV.setHasFixedSize(true);
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_nav_menu);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mGenre = preferences.getString("key_genre", "rap");
+        mNumSongs = preferences.getString("key_numsongs", "50");
+        mPopularity = preferences.getString("key_popu", "high");
+        mPlaylistName = preferences.getString("key_name", "Default");
+        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -267,6 +297,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 onRequestTokenClicked();
                 final AuthenticationRequest request = getAuthenticationLogoutRequest(AuthenticationResponse.Type.TOKEN);
                 AuthenticationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request);
+                mPlaylistItemsRV.setVisibility(View.INVISIBLE);
+                ImageView spotifyImage = findViewById(R.id.spot_img);
+                spotifyImage.setVisibility(View.VISIBLE);
+                TextView randifyText = findViewById(R.id.randify_text);
+                randifyText.setVisibility(View.VISIBLE);
+                TextView playlistText = findViewById(R.id.playlist_text);
+                playlistText.setBackgroundColor(Color.WHITE);
+                playlistText.setVisibility(View.INVISIBLE);
                 mLogout = 1;
                 return true;
             case R.id.nav_help:
@@ -294,5 +332,93 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             snackbar.show();
             return;
         }
+
+        PlaylistUtility playlist = new PlaylistUtility();
+        String holdURI;
+        holdURI = playlist.getPlaylistTracks(mAccessToken, mGenre, mNumSongs, mPopularity);
+        playlistJson(holdURI);
+
+    }
+
+    public void playlistJson(String URI){
+        final Request request = new Request.Builder()
+                .url(URI)
+                .addHeader("Authorization","Bearer " + mAccessToken)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("Failed to fetch data: " + e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                    JSONArray playListInfo = jsonObject.getJSONObject("tracks").getJSONArray("items");
+                    System.out.println(playListInfo.getJSONObject(0).toString(3));
+
+                    for(int i = 0; i < playListInfo.length(); i++){
+                        mArtists.add("by " + playListInfo.getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name"));
+                        mTracks.add(playListInfo.getJSONObject(i).getString("name"));
+                        int milliseconds = Integer.parseInt(playListInfo.getJSONObject(i).getString("duration_ms"));
+                        int seconds = (int) (milliseconds / 1000) % 60 ;
+                        int minutes = (int) ((milliseconds / (1000*60)) % 60);
+                        String convertSec = String.valueOf(seconds);
+                        String convertMin = String.valueOf(minutes);
+                        if (seconds < 10){
+                            convertSec = "0" + seconds;
+                        }
+                        mDuration.add(convertMin+":"+convertSec);
+                        mID.add(playListInfo.getJSONObject(i).getString("id"));
+                        mImageURL.add(playListInfo.getJSONObject(i).getJSONObject("album").getJSONArray("images").getJSONObject(0).getString("url"));
+
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPlaylistItemsRV.setVisibility(View.VISIBLE);
+                            ImageView spotifyImage = findViewById(R.id.spot_img);
+                            spotifyImage.setVisibility(View.INVISIBLE);
+                            TextView randifyText = findViewById(R.id.randify_text);
+                            randifyText.setVisibility(View.INVISIBLE);
+                            TextView playlistText = findViewById(R.id.playlist_text);
+                            playlistText.setText(mPlaylistName);
+                            playlistText.setVisibility(View.VISIBLE);
+                            playlistText.setBackgroundColor(Color.LTGRAY);
+                            mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    System.out.println("Failed to parse data: " + e);
+                }
+            }
+        });
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        mGenre = sharedPreferences.getString("key_genre", "rap");
+        mNumSongs = sharedPreferences.getString("key_numsongs", "50");
+        mPopularity = sharedPreferences.getString("key_popu", "high");
+        mPlaylistName = sharedPreferences.getString("key_name", "Default");
+        System.out.println(mGenre + mNumSongs + mPopularity);
+        mArtists.removeAll(mArtists);
+        mTracks.removeAll(mTracks);
+        mDuration.removeAll(mDuration);
+        mID.removeAll(mID);
+        mImageURL.removeAll(mImageURL);
+    }
+
+    @Override
+    public void onPlaylistItemClick(String test) {
+        System.out.println("TEST");
     }
 }

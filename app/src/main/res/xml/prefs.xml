@@ -3,7 +3,7 @@
 
 
     <ListPreference
-        android:key="@string/pref_sort_key"
+        android:key="key_genre"
         android:title="@string/pref_sort_title"
         android:summary="%s"
         android:dialogTitle="@string/pref_sort_title"
@@ -13,19 +13,22 @@
 
     <EditTextPreference
         android:key="key_name"
-        android:title="Playlist Name"/>
+        android:title="Playlist Name"
+        android:defaultValue="default"/>
 
     <EditTextPreference
         android:key="key_numsongs"
         android:inputType="numberDecimal"
         android:digits="0123456789"
-        android:title="Number of Songs"/>
+        android:title="Number of Songs (0-50)"
+        android:defaultValue="50"/>
 
     <EditTextPreference
         android:key="key_popu"
         android:inputType="numberDecimal"
         android:digits="0123456789"
-        android:title="Popularity"/>
+        android:title="Popularity (high, med or low)"
+        android:defaultValue="high"/>
 
 
 </PreferenceScreen>

@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -21,7 +22,28 @@
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
+        <TextView
+            android:id="@+id/playlist_text"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:layout_above="@+id/spot_img"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="-29dp"
+            android:background="@android:color/white"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="#000"
+            android:textSize="25sp" />
+
         <ImageView
+            android:id="@+id/spot_img"
             android:layout_width="264dp"
             android:layout_height="203dp"
             android:layout_alignParentEnd="true"
@@ -29,10 +51,11 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="78dp"
             android:layout_marginRight="78dp"
-            android:layout_marginBottom="375dp"
+            android:layout_marginBottom="362dp"
             android:src="@drawable/spotify" />
 
         <TextView
+            android:id="@+id/randify_text"
             android:layout_width="381dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -40,11 +63,11 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginLeft="14dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="164dp"
+            android:layout_marginBottom="119dp"
             android:gravity="center"
             android:padding="8dp"
             android:text="Welcome to Randify! We use Spotify's extensive API to generate random playlists based on your specifications. To begin, login to Spotify and press the generate playlist button."
@@ -62,14 +85,22 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="53dp"
-            android:layout_marginLeft="53dp"
-            android:layout_marginEnd="49dp"
-            android:layout_marginRight="49dp"
-            android:layout_marginBottom="95dp"
+            android:layout_marginStart="54dp"
+            android:layout_marginLeft="54dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="3dp"
             android:onClick="generatePlaylist"
             android:text="Generate Playlist"
             android:textColor="@android:color/black" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_playlist_items"
+            android:layout_width="match_parent"
+            android:layout_height="471dp"
+            android:layout_above="@+id/btn_gen"
+            android:layout_marginBottom="-1dp" />
+
 
     </RelativeLayout>
 
