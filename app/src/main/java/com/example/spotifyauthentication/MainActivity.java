@@ -76,6 +76,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<String> mImageURL = new ArrayList<String>();
     private ProgressBar mLoadingIndicatorPB;
     private TextView mLoadingErrorMessageTV;
+    private static final String SEARCH_TRACK_LIST_KEY = "searchtrackList";
+    private static final String SEARCH_ARTIST_LIST_KEY = "searchartistList";
+    private static final String SEARCH_DURATION_LIST_KEY = "searchdurationList";
+    private static final String SEARCH_ID_LIST_KEY = "searchidList";
+    private static final String SEARCH_IMAGE_LIST_KEY = "searchimageList";
+    private static final String SEARCH_PLAYLIST_LIST_KEY = "searchplaylistList";
+    private static final String SEARCH_ACCESS_LIST_KEY = "searchaccessList";
+    private static final String SEARCH_DISPLAY_LIST_KEY = "searchdisplayList";
+    private static final String SEARCH_PIC_LIST_KEY = "searchpicList";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +108,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mPlaylistItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mPlaylistItemsRV.setHasFixedSize(true);
 
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SEARCH_TRACK_LIST_KEY)) {
+            mAccessToken = (String)savedInstanceState.getString(SEARCH_ACCESS_LIST_KEY);
+            if(mAccessToken != null){
+                mPlaylistItemsRV.setVisibility(View.VISIBLE);
+                ImageView spotifyImage = findViewById(R.id.spot_img);
+                spotifyImage.setVisibility(View.INVISIBLE);
+                TextView randifyText = findViewById(R.id.randify_text);
+                randifyText.setVisibility(View.INVISIBLE);
+                TextView playlistText = findViewById(R.id.playlist_text);
+                playlistText.setVisibility(View.VISIBLE);
+                playlistText.setBackgroundColor(Color.LTGRAY);
+                mPlaylistName = (String)savedInstanceState.getString(SEARCH_PLAYLIST_LIST_KEY);
+                playlistText.setText(mPlaylistName);
+                mdisplayName = (String)savedInstanceState.getString(SEARCH_DISPLAY_LIST_KEY);
+                setResponse(mdisplayName);
+                mdisplayPic = (String)savedInstanceState.getString(SEARCH_PIC_LIST_KEY);
+                setPicture(mdisplayPic);
+                mTracks = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_TRACK_LIST_KEY);
+                mArtists = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ARTIST_LIST_KEY);
+                mDuration = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_DURATION_LIST_KEY);
+                mID = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ID_LIST_KEY);
+                mImageURL = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_IMAGE_LIST_KEY);
+                mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists);
+            }
+        }
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_nav_menu);
@@ -108,6 +144,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mPopularity = preferences.getString("key_popu", "high");
         mPlaylistName = preferences.getString("key_name", "Default");
         preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mTracks != null) {
+            outState.putStringArrayList(SEARCH_TRACK_LIST_KEY,
+                    mTracks);
+        }
+        if (mArtists != null) {
+            outState.putStringArrayList(SEARCH_ARTIST_LIST_KEY,
+                    mArtists);
+        }
+        if (mDuration != null) {
+            outState.putStringArrayList(SEARCH_DURATION_LIST_KEY,
+                    mDuration);
+        }
+        if (mID != null) {
+            outState.putStringArrayList(SEARCH_ID_LIST_KEY,
+                    mID);
+        }
+        if (mImageURL != null) {
+            outState.putStringArrayList(SEARCH_IMAGE_LIST_KEY,
+                    mImageURL);
+        }
+        if(mPlaylistName != null){
+            outState.putString(SEARCH_PLAYLIST_LIST_KEY, mPlaylistName);
+        }
+        if(mAccessToken != null){
+            outState.putString(SEARCH_ACCESS_LIST_KEY, mAccessToken);
+        }
+        if(mdisplayName != null){
+            outState.putString(SEARCH_DISPLAY_LIST_KEY, mdisplayName);
+        }
+        if(mdisplayPic != null){
+            outState.putString(SEARCH_PIC_LIST_KEY, mdisplayPic);
+        }
     }
 
     @Override
@@ -217,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         ImageView displayPic = headerView.findViewById(R.id.display_pic);
         Glide.with(displayPic.getContext()).load(pic).into(displayPic);
-
     }
 
     private void setResponse(final String text) {
@@ -247,9 +319,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        System.out.println("INSIDE ONPREPAREOPTIONS");
         final MenuItem logoItem = menu.findItem(R.id.login);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
         if(mLogout == 0){
+            System.out.println("INSIDE HERE!");
             Menu nav_Menu = navigationView.getMenu();
             nav_Menu.findItem(R.id.nav_login).setVisible(false);
             nav_Menu.findItem(R.id.nav_logout).setVisible(true);
@@ -263,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }
         else{
+            System.out.println("INSIDE HERE2!");
             logoItem.setIcon(R.drawable.ic_action_name);
             View headerView = navigationView.getHeaderView(0);
             ImageView displayPic = headerView.findViewById(R.id.display_pic);

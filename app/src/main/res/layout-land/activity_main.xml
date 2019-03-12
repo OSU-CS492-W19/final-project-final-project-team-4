@@ -35,7 +35,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginEnd="0dp"
             android:layout_marginRight="0dp"
-            android:layout_marginBottom="-29dp"
+            android:layout_marginBottom="-59dp"
             android:background="?android:colorBackground"
             android:gravity="center"
             android:padding="6dp"
@@ -44,14 +44,14 @@
 
         <ImageView
             android:id="@+id/spot_img"
-            android:layout_width="264dp"
-            android:layout_height="203dp"
+            android:layout_width="122dp"
+            android:layout_height="99dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="78dp"
-            android:layout_marginRight="78dp"
-            android:layout_marginBottom="362dp"
+            android:layout_marginEnd="286dp"
+            android:layout_marginRight="286dp"
+            android:layout_marginBottom="233dp"
             android:src="@drawable/spotify" />
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_marginLeft="14dp"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="119dp"
+            android:layout_marginBottom="80dp"
             android:gravity="center"
             android:padding="8dp"
             android:text="Welcome to Randify! We use Spotify's extensive API to generate random playlists based on your specifications. To begin, login to Spotify and press the generate playlist button."
@@ -97,9 +97,13 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_playlist_items"
             android:layout_width="match_parent"
-            android:layout_height="471dp"
-            android:layout_above="@+id/btn_gen"
-            android:layout_marginBottom="-1dp" />
+            android:layout_height="205dp"
+            android:layout_alignBottom="@+id/btn_gen"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="58dp" />
 
         <TextView
             android:id="@+id/tv_loading_error_message"
