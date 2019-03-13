@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import com.bumptech.glide.Glide;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String SEARCH_ACCESS_LIST_KEY = "searchaccessList";
     private static final String SEARCH_DISPLAY_LIST_KEY = "searchdisplayList";
     private static final String SEARCH_PIC_LIST_KEY = "searchpicList";
+    private RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
