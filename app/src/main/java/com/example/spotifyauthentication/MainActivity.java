@@ -112,7 +112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SEARCH_TRACK_LIST_KEY)) {
             mAccessToken = (String)savedInstanceState.getString(SEARCH_ACCESS_LIST_KEY);
+            mTracks = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_TRACK_LIST_KEY);
             if(mAccessToken != null){
+                mdisplayName = (String)savedInstanceState.getString(SEARCH_DISPLAY_LIST_KEY);
+                setResponse(mdisplayName);
+                mdisplayPic = (String)savedInstanceState.getString(SEARCH_PIC_LIST_KEY);
+                setPicture(mdisplayPic);
+            }
+            if(mAccessToken != null && mTracks.size() >= 1){
                 mPlaylistItemsRV.setVisibility(View.VISIBLE);
                 ImageView spotifyImage = findViewById(R.id.spot_img);
                 spotifyImage.setVisibility(View.INVISIBLE);
@@ -123,11 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 playlistText.setBackgroundColor(Color.LTGRAY);
                 mPlaylistName = (String)savedInstanceState.getString(SEARCH_PLAYLIST_LIST_KEY);
                 playlistText.setText(mPlaylistName);
-                mdisplayName = (String)savedInstanceState.getString(SEARCH_DISPLAY_LIST_KEY);
-                setResponse(mdisplayName);
-                mdisplayPic = (String)savedInstanceState.getString(SEARCH_PIC_LIST_KEY);
-                setPicture(mdisplayPic);
-                mTracks = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_TRACK_LIST_KEY);
                 mArtists = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ARTIST_LIST_KEY);
                 mDuration = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_DURATION_LIST_KEY);
                 mID = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ID_LIST_KEY);
@@ -204,6 +206,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mLogout = 0;
                 return true;
             case android.R.id.home:
+                if(mAccessToken != null){
+                    NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
+                    Menu nav_Menu = navigationView.getMenu();
+                    nav_Menu.findItem(R.id.nav_login).setVisible(false);
+                    nav_Menu.findItem(R.id.nav_logout).setVisible(true);
+                }
+                else{
+                    NavigationView navigationView = (NavigationView) findViewById(R.id.nv_nav_drawer);
+                    Menu nav_Menu = navigationView.getMenu();
+                    nav_Menu.findItem(R.id.nav_login).setVisible(true);
+                    nav_Menu.findItem(R.id.nav_logout).setVisible(false);
+                }
                 mDrawerLayout.openDrawer(Gravity.START);
                 return true;
             case R.id.action_settings:
@@ -326,8 +340,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(mLogout == 0){
             System.out.println("INSIDE HERE!");
             Menu nav_Menu = navigationView.getMenu();
-            nav_Menu.findItem(R.id.nav_login).setVisible(false);
-            nav_Menu.findItem(R.id.nav_logout).setVisible(true);
             if (mdisplayPic != null) {
                 Glide.with(this).asBitmap().load(mdisplayPic).into(new SimpleTarget<Bitmap>() {
                     @Override
@@ -343,8 +355,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             View headerView = navigationView.getHeaderView(0);
             ImageView displayPic = headerView.findViewById(R.id.display_pic);
             Menu nav_Menu = navigationView.getMenu();
-            nav_Menu.findItem(R.id.nav_login).setVisible(true);
-            nav_Menu.findItem(R.id.nav_logout).setVisible(false);
             displayPic.setImageResource(R.drawable.user);
             TextView navUsername = (TextView) headerView.findViewById(R.id.display_name);
             navUsername.setText("");
