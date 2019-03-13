@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 randifyText.setVisibility(View.INVISIBLE);
                 TextView playlistText = findViewById(R.id.playlist_text);
                 playlistText.setVisibility(View.VISIBLE);
-                playlistText.setBackgroundColor(Color.LTGRAY);
+                playlistText.setBackgroundColor(Color.rgb(34,32,32));
                 mPlaylistName = (String)savedInstanceState.getString(SEARCH_PLAYLIST_LIST_KEY);
                 playlistText.setText(mPlaylistName);
                 mArtists = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ARTIST_LIST_KEY);
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView randifyText = findViewById(R.id.randify_text);
                 randifyText.setVisibility(View.VISIBLE);
                 TextView playlistText = findViewById(R.id.playlist_text);
-                playlistText.setBackgroundColor(Color.WHITE);
+                playlistText.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setVisibility(View.INVISIBLE);
                 mLogout = 1;
                 return true;
