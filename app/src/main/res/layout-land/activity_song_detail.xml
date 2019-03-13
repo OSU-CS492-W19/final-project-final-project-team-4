@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/new_spotify_back">
+
+
+    <ImageView
+        android:id="@+id/song_image"
+        android:layout_width="237dp"
+        android:layout_height="205dp"
+        android:layout_gravity="center"
+        android:padding="16dp" />
+
+    <TextView
+        android:id="@+id/song_name"
+        android:layout_width="427dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:shadowColor="#FFFFFF"
+        android:shadowDx="0.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="8"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/song_arist"
+        android:layout_width="383dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:shadowColor="#FFFFFF"
+        android:shadowDx="0.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="6"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/song_duration"
+        android:layout_width="390dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:shadowColor="#FFFFFF"
+        android:shadowDx="0.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="4"/>
+
+    
+
+</LinearLayout>

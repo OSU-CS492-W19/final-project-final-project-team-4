@@ -39,7 +39,11 @@
             android:background="?android:colorBackground"
             android:gravity="center"
             android:padding="6dp"
-            android:textColor="#000"
+            android:textColor="#84bd00"
+            android:shadowColor="#84bd00"
+            android:shadowDx="0.0"
+            android:shadowDy="0.0"
+            android:shadowRadius="6"
             android:textSize="25sp" />
 
         <ImageView

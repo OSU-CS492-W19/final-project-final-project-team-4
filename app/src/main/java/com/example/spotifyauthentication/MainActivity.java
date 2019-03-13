@@ -487,7 +487,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             TextView playlistText = findViewById(R.id.playlist_text);
                             playlistText.setText(mPlaylistName);
                             playlistText.setVisibility(View.VISIBLE);
-                            playlistText.setBackgroundColor(Color.LTGRAY);
+//                            playlistText.setBackgroundColor(Color.LTGRAY);
+                            playlistText.setBackgroundColor(Color.rgb(34,32,32));
                             mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists, mImageURL);
                         }
                     });
