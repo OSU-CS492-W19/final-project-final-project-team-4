@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nv_nav_drawer);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView playlistText = findViewById(R.id.playlist_text);
                 playlistText.setVisibility(View.VISIBLE);
                 playlistText.setBackgroundColor(Color.rgb(34,32,32));
+                relativeLayout = findViewById(R.id.background);
+                relativeLayout.setBackgroundColor(Color.rgb(34,32,32));
                 mPlaylistName = (String)savedInstanceState.getString(SEARCH_PLAYLIST_LIST_KEY);
                 playlistText.setText(mPlaylistName);
                 mArtists = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ARTIST_LIST_KEY);
@@ -398,8 +401,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 TextView randifyText = findViewById(R.id.randify_text);
                 randifyText.setVisibility(View.VISIBLE);
                 TextView playlistText = findViewById(R.id.playlist_text);
+                relativeLayout = findViewById(R.id.background);
+                relativeLayout.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setVisibility(View.INVISIBLE);
+                mTracks = null;
                 mLogout = 1;
                 return true;
             case R.id.nav_help:
@@ -486,6 +492,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            relativeLayout = findViewById(R.id.background);
+                            relativeLayout.setBackgroundColor(Color.rgb(34,32,32));
                             TextView playlistText = findViewById(R.id.playlist_text);
                             playlistText.setText(mPlaylistName);
                             playlistText.setVisibility(View.VISIBLE);
