@@ -20,6 +20,10 @@ public class PlaylistUtility {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken;
     private String mURI = "";
+    public static final String EXTRA_CURRENT_SONG = "PlaylistUtility.Song";
+    public static final String EXTRA_CURRENT_ARTIST = "PlaylistUtility.Artist";
+    public static final String EXTRA_CURRENT_DUR = "PlaylistUtility.Dur";
+    public static final String EXTRA_CURRENT_IMAGE = "PlaylistUtility.ImageUrl";
 
     public PlaylistUtility(){
 

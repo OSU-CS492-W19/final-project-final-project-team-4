@@ -17,20 +17,22 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private ArrayList<String> mPlaylistTrackNames;
     private ArrayList<String> mPlaylistTrackDur;
     private ArrayList<String> mPlaylistTrackArtist;
+    private ArrayList<String> mPlaylistImageUrl;
     private OnPlaylistItemClickListener mPlaylistItemClickListener;
 
     public interface OnPlaylistItemClickListener {
-        void onPlaylistItemClick(String track);
+        void onPlaylistItemClick(String track, String arist, String dur, String ImgUrl);
     }
 
     public PlaylistAdapter(OnPlaylistItemClickListener clickListener) {
         mPlaylistItemClickListener = clickListener;
     }
 
-    public void updatePlaylistItems(ArrayList<String> TrackData, ArrayList<String> durData, ArrayList<String> artistData) {
+    public void updatePlaylistItems(ArrayList<String> TrackData, ArrayList<String> durData, ArrayList<String> artistData, ArrayList<String> ImgUrl) {
         mPlaylistTrackNames = TrackData;
         mPlaylistTrackDur = durData;
         mPlaylistTrackArtist = artistData;
+        mPlaylistImageUrl = ImgUrl;
         notifyDataSetChanged();
     }
 
@@ -76,8 +78,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
         @Override
         public void onClick(View v) {
+            int x = getAdapterPosition();
+            String TrackArtist = mPlaylistTrackArtist.get(x);
+            String TrackDur = mPlaylistTrackDur.get(x);
             String TrackItem = mPlaylistTrackNames.get(getAdapterPosition());
-            mPlaylistItemClickListener.onPlaylistItemClick(TrackItem);
+            String TrackImage = mPlaylistImageUrl.get(x);
+            mPlaylistItemClickListener.onPlaylistItemClick(TrackItem,TrackArtist,TrackDur, TrackImage);
         }
     }
 }

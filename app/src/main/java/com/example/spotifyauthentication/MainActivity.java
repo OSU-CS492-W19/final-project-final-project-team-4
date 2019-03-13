@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -131,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mDuration = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_DURATION_LIST_KEY);
                 mID = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_ID_LIST_KEY);
                 mImageURL = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_IMAGE_LIST_KEY);
-                mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists);
+                mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists, mImageURL);
             }
         }
 
@@ -477,7 +478,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             playlistText.setText(mPlaylistName);
                             playlistText.setVisibility(View.VISIBLE);
                             playlistText.setBackgroundColor(Color.LTGRAY);
-                            mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists);
+                            mPlaylistAdapter.updatePlaylistItems(mTracks, mDuration, mArtists, mImageURL);
                         }
                     });
 
@@ -504,7 +505,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onPlaylistItemClick(String test) {
-        System.out.println("TEST");
+    public void onPlaylistItemClick(String song, String artist, String duration, String ImageUrl) {
+//        System.out.println("Song: " + song + " By: " + artist + " Duration: " + duration + " ImageAsset Found: " + ImageUrl);
+
+        Intent intent = new Intent(this,SongDetailActivity.class);
+        intent.putExtra(PlaylistUtility.EXTRA_CURRENT_SONG,song);
+        intent.putExtra(PlaylistUtility.EXTRA_CURRENT_ARTIST,artist);
+        intent.putExtra(PlaylistUtility.EXTRA_CURRENT_DUR,duration);
+        intent.putExtra(PlaylistUtility.EXTRA_CURRENT_IMAGE,ImageUrl);
+        startActivity(intent);
+
     }
+
+
+
 }
