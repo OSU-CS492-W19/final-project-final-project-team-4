@@ -20,6 +20,7 @@ public class PlaylistUtility {
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private String mAccessToken;
     private String mURI = "";
+    private String createURI = "";
     public static final String EXTRA_CURRENT_SONG = "PlaylistUtility.Song";
     public static final String EXTRA_CURRENT_ARTIST = "PlaylistUtility.Artist";
     public static final String EXTRA_CURRENT_DUR = "PlaylistUtility.Dur";
@@ -50,5 +51,7 @@ public class PlaylistUtility {
         mURI = "https://api.spotify.com/v1/search?q=genre%3A" + genre + "&type=track&market=US&limit=" + numSongs + "&offset=" + offset;
         return mURI;
     }
+
+
 
 }
