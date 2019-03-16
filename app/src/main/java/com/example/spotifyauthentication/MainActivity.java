@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         System.out.println(jsonObject.toString(3));
-                        mdisplayName = jsonObject.getString("display_name");
+                        mdisplayName = jsonObject.getString("id");
                         JSONArray images = jsonObject.getJSONArray("images");
                         mdisplayPic = images.getJSONObject(0).getString("url");
                         System.out.println(mdisplayPic);
