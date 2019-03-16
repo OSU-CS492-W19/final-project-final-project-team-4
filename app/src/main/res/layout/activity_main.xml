@@ -87,16 +87,30 @@
             android:layout_height="62dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+
             android:layout_alignParentBottom="true"
             android:layout_marginStart="54dp"
             android:layout_marginLeft="54dp"
-            android:layout_marginEnd="48dp"
-            android:layout_marginRight="48dp"
+
             android:layout_marginBottom="3dp"
             android:onClick="generatePlaylist"
             android:text="Generate Playlist"
+            android:textColor="@android:color/black" />
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="150dp"
+            android:layout_height="62dp"
+
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
+            android:layout_marginBottom="3dp"
+            android:onClick="uploadPlaylist"
+            android:text="Upload Playlist"
             android:textColor="@android:color/black" />
 
         <android.support.v7.widget.RecyclerView
@@ -114,6 +128,14 @@
             android:padding="16dp"
             android:visibility="invisible"
             android:text="Could not generate playlist. Check your internet!" />
+        <TextView
+            android:id="@+id/tv_uploading_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:padding="16dp"
+            android:visibility="invisible"
+            android:text="Could not upload playlist. Check your internet!" />
 
         <ProgressBar
             android:id="@+id/pb_loading_indicator"

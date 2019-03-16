@@ -20,10 +20,12 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -46,8 +48,11 @@ import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PlaylistAdapter.OnPlaylistItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mDisplayName;
     private String mdisplayPic;
     private String mdisplayName;
+    private String mUserID;
     private DrawerLayout mDrawerLayout;
     private String mPlaylistName;
     private int mLogout = 0;
@@ -78,6 +84,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ArrayList<String> mImageURL = new ArrayList<String>();
     private ProgressBar mLoadingIndicatorPB;
     private TextView mLoadingErrorMessageTV;
+    private TextView mUploadingErrorMessageTV;
+    private Button generateButton;
+    private Button uploadButton;
+
+
+
+
+
+
     private static final String SEARCH_TRACK_LIST_KEY = "searchtrackList";
     private static final String SEARCH_ARTIST_LIST_KEY = "searchartistList";
     private static final String SEARCH_DURATION_LIST_KEY = "searchdurationList";
@@ -95,9 +110,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         mLoadingIndicatorPB = findViewById(R.id.pb_loading_indicator);
         mLoadingErrorMessageTV = findViewById(R.id.tv_loading_error_message);
+        mUploadingErrorMessageTV = findViewById(R.id.tv_uploading_error_message);
+        mUploadingErrorMessageTV.setVisibility(View.INVISIBLE);
         mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
         mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
         mDrawerLayout = findViewById(R.id.drawer_layout);
+        generateButton = findViewById(R.id.btn_gen);
+        uploadButton = findViewById(R.id.btn_upload);
         NavigationView navigationView = findViewById(R.id.nv_nav_drawer);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -107,10 +126,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mPlaylistItemsRV = findViewById(R.id.rv_playlist_items);
         mPlaylistItemsRV.setVisibility(View.INVISIBLE);
+        uploadButton.setVisibility(View.INVISIBLE);
+        generateButton.getLayoutParams().width = (int) getResources().getDimension(R.dimen.button_full);
+        generateButton.setLayoutParams(generateButton.getLayoutParams());
         mPlaylistAdapter = new PlaylistAdapter(this);
         mPlaylistItemsRV.setAdapter(mPlaylistAdapter);
         mPlaylistItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mPlaylistItemsRV.setHasFixedSize(true);
+
+
+
+
 
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SEARCH_TRACK_LIST_KEY)) {
@@ -124,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(mAccessToken != null && mTracks.size() >= 1){
                 mPlaylistItemsRV.setVisibility(View.VISIBLE);
+                uploadButton.setVisibility(View.VISIBLE);
+                generateButton.getLayoutParams().width = (int) getResources().getDimension(R.dimen.button_half);
+                generateButton.setLayoutParams(generateButton.getLayoutParams());
                 ImageView spotifyImage = findViewById(R.id.spot_img);
                 spotifyImage.setVisibility(View.INVISIBLE);
                 TextView randifyText = findViewById(R.id.randify_text);
@@ -252,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AuthenticationRequest getAuthenticationRequest(AuthenticationResponse.Type type) {
         return new AuthenticationRequest.Builder(CLIENT_ID, type, getRedirectUri())
                 .setShowDialog(false)
-                .setScopes(new String[]{"user-read-email"})
+                .setScopes(new String[]{"user-read-email", "playlist-modify-public", "playlist-modify-private"})
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -260,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AuthenticationRequest getAuthenticationLogoutRequest(AuthenticationResponse.Type type) {
         return new AuthenticationRequest.Builder(CLIENT_ID, type, getRedirectUri())
                 .setShowDialog(true)
-                .setScopes(new String[]{"user-read-email"})
+                .setScopes(new String[]{"user-read-email", "playlist-modify-public", "playlist-modify-private"})
                 .setCampaign("your-campaign-token")
                 .build();
     }
@@ -293,6 +322,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         System.out.println(jsonObject.toString(3));
                         mdisplayName = jsonObject.getString("display_name");
+                        String tempUserID = jsonObject.getString("uri");
+                        mUserID = tempUserID.substring(13, tempUserID.length());
+                        System.out.println("USER ID:"+ mUserID);
+
+
                         JSONArray images = jsonObject.getJSONArray("images");
                         mdisplayPic = images.getJSONObject(0).getString("url");
                         System.out.println(mdisplayPic);
@@ -396,6 +430,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final AuthenticationRequest request = getAuthenticationLogoutRequest(AuthenticationResponse.Type.TOKEN);
                 AuthenticationClient.openLoginActivity(this, AUTH_TOKEN_REQUEST_CODE, request);
                 mPlaylistItemsRV.setVisibility(View.INVISIBLE);
+                uploadButton.setVisibility(View.INVISIBLE);
+                generateButton.getLayoutParams().width = (int) getResources().getDimension(R.dimen.button_full);
+                generateButton.setLayoutParams(generateButton.getLayoutParams());
                 ImageView spotifyImage = findViewById(R.id.spot_img);
                 spotifyImage.setVisibility(View.VISIBLE);
                 TextView randifyText = findViewById(R.id.randify_text);
@@ -441,8 +478,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    public void uploadPlaylist(View view){
+        PlaylistUtility playlist = new PlaylistUtility();
+        String holdURI;
+        holdURI = "https://api.spotify.com/v1/users/" + mUserID + "/playlists";
+
+        uploadJSON(holdURI);
+
+    }
+
+
+    public void uploadJSON(String URI){
+       MediaType JSON = MediaType.parse("application/json");
+
+
+        String postBody="{\n" +
+                "    \"name\": \""+mPlaylistName+"\"\n" +
+                "}";
+
+        RequestBody body = RequestBody.create(JSON, postBody);
+
+        //Final Request info
+        final Request request = new Request.Builder()
+                .url(URI)
+                .addHeader("Authorization","Bearer " + mAccessToken)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+        Log.d("LOG", "createJSON: " + request.toString());
+        Log.d("LOG", "createJSON: " + request.headers().toString());
+        Log.d("LOG", "createJSON: "+ request.body());
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+        mLoadingIndicatorPB.setVisibility(View.VISIBLE);
+
+
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("Failed to fetch data: " + e);
+                mUploadingErrorMessageTV.setVisibility(View.VISIBLE);
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+                mUploadingErrorMessageTV.setVisibility(View.INVISIBLE);
+                Log.d("LOG", "worked: " + response.body().string());
+            }
+        });
+    }
+
     public void playlistJson(String URI){
         mPlaylistItemsRV.setVisibility(View.VISIBLE);
+        uploadButton.setVisibility(View.VISIBLE);
+        generateButton.getLayoutParams().width = (int) getResources().getDimension(R.dimen.button_half);
+        generateButton.setLayoutParams(generateButton.getLayoutParams());
         ImageView spotifyImage = findViewById(R.id.spot_img);
         spotifyImage.setVisibility(View.INVISIBLE);
         TextView randifyText = findViewById(R.id.randify_text);
