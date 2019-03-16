@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 relativeLayout.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setVisibility(View.INVISIBLE);
-                mTracks = null;
+                mTracks.removeAll(mTracks);
                 mLogout = 1;
                 return true;
             case R.id.nav_help:
