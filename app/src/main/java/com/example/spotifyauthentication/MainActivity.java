@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mAccessToken = (String)savedInstanceState.getString(SEARCH_ACCESS_LIST_KEY);
             mTracks = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_TRACK_LIST_KEY);
             mUri = (ArrayList)savedInstanceState.getStringArrayList(SEARCH_TRACK_LIST_URI);
+            System.out.println(mUri);
             if(mAccessToken != null){
                 mdisplayName = (String)savedInstanceState.getString(SEARCH_DISPLAY_LIST_KEY);
                 setResponse(mdisplayName);
@@ -330,7 +331,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     try {
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         System.out.println(jsonObject.toString(3));
-                        mdisplayName = jsonObject.getString("display_name");
                         String tempUserID = jsonObject.getString("uri");
                         mUserID = tempUserID.substring(13, tempUserID.length());
                         System.out.println("USER ID:"+ mUserID);
@@ -492,7 +492,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void uploadPlaylist(View view){
         PlaylistUtility playlist = new PlaylistUtility();
         String holdURI;
-        holdURI = "https://api.spotify.com/v1/users/" + mUserID + "/playlists";
+        holdURI = "https://api.spotify.com/v1/users/" + mdisplayName + "/playlists";
 
         uploadJSON(holdURI);
 
@@ -557,9 +557,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void trackJson(String URI){
         MediaType JSON = MediaType.parse("application/json");
         Log.d("Jimmy", "trackJson "+ URI);
+        System.out.println("Playlist URI: " + URI);
+        System.out.println("Track URI: " + mUri);
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for (int i = 0; i< mUri.size();i++){
+            System.out.println("IN HERE");
             sb.append("\"");
             sb.append(mUri.get(i));
             sb.append("\"");
@@ -690,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        System.out.println(mUri);
         mGenre = sharedPreferences.getString("key_genre", "rap");
         mNumSongs = sharedPreferences.getString("key_numsongs", "50");
         mPopularity = sharedPreferences.getString("key_popu", "high");
