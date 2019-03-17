@@ -56,7 +56,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PlaylistAdapter.OnPlaylistItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener {
-    public String TAG = "Jimmy";
     public static final String CLIENT_ID = "4b4b430bd9d743fa9a00bfb99caa671c";
     public static final int AUTH_TOKEN_REQUEST_CODE = 0x10;
     private String playlistID;
@@ -531,8 +530,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String responseString = response.body().string();
                     final JSONObject jsonObject = new JSONObject(responseString);
                     playlistID = jsonObject.getString("id");
-                    Log.d("LOG: ",  playlistID);
-
+                    Log.d("LOG: ","ID is " + playlistID);
+                    String newURL = "https://api.spotify.com/v1/playlists/"+ playlistID + "/tracks";
+                    trackJson(newURL);
                 } catch (JSONException e) {
                     System.out.println(e);
                 }
@@ -540,9 +540,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
     }
+    public void trackJson(String URI){
+        MediaType JSON = MediaType.parse("application/json");
+        Log.d("Jimmy", "trackJson "+ URI);
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i< mUri.size();i++){
+            sb.append("\"");
+            sb.append(mUri.get(i));
+            sb.append("\"");
+            if(i< mUri.size()-1) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        String newArray = sb.toString();
+        Log.d("Jimmy", "trackJson: "+ newArray);
+        String apiBody= "{\n" +
+                "    \"uris\": "+newArray+"\n" +
+                "}";
+        Log.d("Jimmy", "trackJson: "+ apiBody);
+        RequestBody body = RequestBody.create(JSON, apiBody);
 
+        final Request request = new Request.Builder()
+                .url(URI)
+                .addHeader("Authorization","Bearer " + mAccessToken)
+                .addHeader("Content-Type", "application/json")
+                .post(body)
+                .build();
+
+        cancelCall();
+        mCall = mOkHttpClient.newCall(request);
+
+        mCall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                System.out.println("Failed to fetch data: " + e);
+                mUploadingErrorMessageTV.setVisibility(View.VISIBLE);
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
+                mUploadingErrorMessageTV.setVisibility(View.INVISIBLE);
+
+                try {
+                    String responseString = response.body().string();
+                    final JSONObject jsonObject = new JSONObject(responseString);
+                    String snapshot = jsonObject.getString("snapshot_id");
+                    Log.d("snapshot ","snapshot_id " + snapshot);
+
+                } catch (JSONException e) {
+                    System.out.println(e);
+                }
+
+            }
+        });
+    }
     public void playlistJson(String URI){
         mPlaylistItemsRV.setVisibility(View.VISIBLE);
         uploadButton.setVisibility(View.VISIBLE);
@@ -577,8 +633,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     JSONArray playListInfo = jsonObject.getJSONObject("tracks").getJSONArray("items");
                     System.out.println(playListInfo.getJSONObject(0).toString(3));
-                    mUri.removeAll(mUri);
-                    playlistID = null;
+                   // mUri.removeAll(mUri);
+                   // playlistID = null;
                     for(int i = 0; i < playListInfo.length(); i++){
                         mArtists.add("by " + playListInfo.getJSONObject(i).getJSONArray("artists").getJSONObject(0).getString("name"));
                         mTracks.add(playListInfo.getJSONObject(i).getString("name"));
@@ -626,9 +682,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         System.out.println(mGenre + mNumSongs + mPopularity);
         mArtists.removeAll(mArtists);
         mTracks.removeAll(mTracks);
+        mUri.removeAll(mUri);
         mDuration.removeAll(mDuration);
         mID.removeAll(mID);
         mImageURL.removeAll(mImageURL);
+        playlistID = null;
     }
 
     @Override
