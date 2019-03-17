@@ -15,9 +15,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="113dp"
-        android:layout_marginRight="113dp"
-        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginRight="103dp"
+        android:layout_marginBottom="37dp"
         android:elevation="12dp"
         app:cardCornerRadius="40dp">
 
@@ -33,6 +33,7 @@
 
     <TextView
         android:id="@+id/display_name"
+        android:gravity="center"
         android:layout_width="161dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

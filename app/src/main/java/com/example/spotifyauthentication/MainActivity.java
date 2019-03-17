@@ -336,6 +336,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         System.out.println("USER ID:"+ mUserID);
 
 
+                        mdisplayName = jsonObject.getString("id");
+
                         JSONArray images = jsonObject.getJSONArray("images");
                         mdisplayPic = images.getJSONObject(0).getString("url");
                         System.out.println(mdisplayPic);
@@ -451,7 +453,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 relativeLayout.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setBackgroundColor(Color.parseColor("#FFFAFAFA"));
                 playlistText.setVisibility(View.INVISIBLE);
-                mTracks = null;
+                mTracks.removeAll(mTracks);
                 mLogout = 1;
                 return true;
             case R.id.nav_help:
