@@ -54,8 +54,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="78dp"
-            android:layout_marginRight="78dp"
+            android:layout_marginEnd="72dp"
+            android:layout_marginRight="72dp"
             android:layout_marginBottom="362dp"
             android:src="@drawable/spotify" />
 
